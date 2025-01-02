@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src/weight_tracker_backend"
+]
+resolver = "2"

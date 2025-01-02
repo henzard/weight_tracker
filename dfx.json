@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "weight_tracker_backend": {
+      "candid": "src/weight_tracker_backend/weight_tracker_backend.did",
+      "package": "weight_tracker_backend",
+      "type": "rust"
+    },
+    "weight_tracker_frontend": {
+      "dependencies": [
+        "weight_tracker_backend"
+      ],
+      "source": [
+        "src/weight_tracker_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "weight_tracker_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
