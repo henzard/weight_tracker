@@ -1,0 +1,33 @@
+[
+  {
+    "disable_security_policy_warning": true,
+    "policies": [
+      {
+        "match": "**/*",
+        "headers": {
+          "X-Frame-Options": "DENY",
+          "X-Content-Type-Options": "nosniff",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "Referrer-Policy": "same-origin",
+          "Content-Security-Policy": "default-src 'self' 'unsafe-eval' 'unsafe-inline' data: https://*.ic0.app https://*.icp0.io https://*.internetcomputer.org; connect-src 'self' https://*.ic0.app https://*.icp0.io https://*.internetcomputer.org"
+        },
+        "allow_raw_access": false,
+        "security_policy": "standard"
+      },
+      {
+        "match": "**/*.ico",
+        "headers": {
+          "Content-Type": "image/x-icon",
+          "X-Frame-Options": "DENY",
+          "X-Content-Type-Options": "nosniff",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "Referrer-Policy": "same-origin",
+          "Content-Security-Policy": "default-src 'self' 'unsafe-eval' 'unsafe-inline' data: https://*.ic0.app https://*.icp0.io https://*.internetcomputer.org; connect-src 'self' https://*.ic0.app https://*.icp0.io https://*.internetcomputer.org"
+        },
+        "allow_raw_access": false,
+        "security_policy": "standard"
+      },
+      // ... other policies remain the same
+    ]
+  }
+] 

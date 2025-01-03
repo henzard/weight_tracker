@@ -1,0 +1,318 @@
+.table-container {
+  margin: 20px 0;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+th:hover {
+  background-color: #e0e0e0;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+
+tr.deleted {
+  background-color: #ffebee;
+  color: #666;
+}
+
+tr.deleted:hover {
+  background-color: #ffcdd2;
+}
+
+button {
+  padding: 6px 12px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #c0392b;
+}
+
+.edit-form {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+input[type="number"],
+input[type="text"] {
+  padding: 8px;
+  margin: 0 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+label {
+  margin-right: 10px;
+}
+
+/* Add any custom styles here */
+.rdt_TableHeader {
+  font-weight: bold;
+}
+
+.rdt_TableCell {
+  padding: 15px 8px !important;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.deleted {
+  background-color: #ffebee !important;
+  color: #666 !important;
+}
+
+/* Additional styles */
+.shadow-sm {
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+}
+
+.card-header {
+  border-bottom: 0;
+}
+
+.alert {
+  margin-bottom: 0;
+}
+
+.btn-group {
+  gap: 0.5rem;
+}
+
+.input-group-text {
+  background-color: #fff;
+}
+
+/* Hover effect for guide cards */
+.card.h-100:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Icon colors */
+.text-primary { color: #0d6efd; }
+.text-success { color: #198754; }
+.text-info { color: #0dcaf0; }
+
+/* Add these styles for the logo */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .img-fluid {
+    max-width: 200px;
+    margin: 0 auto;
+    display: block;
+  }
+}
+
+/* Auth styles */
+.principal-text {
+  font-family: monospace;
+  background: #f8f9fa;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  transition: background-color 0.2s ease;
+}
+
+.principal-text:hover {
+  background: #e9ecef;
+}
+
+.principal-text:active {
+  background: #dee2e6;
+}
+
+.auth-container {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.auth-container h2 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.auth-container p {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.badge {
+  font-family: monospace;
+  font-size: 0.8rem;
+  cursor: help;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.stat-item {
+  background: #f8f9fa;
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.stat-value {
+  display: block;
+  font-weight: bold;
+  color: #0d6efd;
+}
+
+/* Toast customization */
+.Toastify__toast {
+  min-height: auto !important;
+  margin-bottom: 0.5rem !important;
+  padding: 8px 12px !important;
+}
+
+.Toastify__toast-container {
+  width: auto !important;
+  min-width: 300px !important;
+  max-width: 400px !important;
+}
+
+.Toastify__toast-body {
+  padding: 4px !important;
+  margin: 0 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+}
+
+.Toastify__toast--success {
+  background: #f0f9f4 !important;
+  color: #1e4d2b !important;
+  border: 1px solid #c3e6cb !important;
+}
+
+.Toastify__toast--error {
+  background: #fdf3f4 !important;
+  color: #712b29 !important;
+  border: 1px solid #f5c6cb !important;
+}
+
+.Toastify__toast--info {
+  background: #e8f4fd !important;
+  color: #004085 !important;
+  border: 1px solid #b8daff !important;
+}
+
+.Toastify__close-button {
+  opacity: 0.5 !important;
+  padding: 4px !important;
+  color: currentColor !important;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1 !important;
+}
+
+.Toastify__toast-icon {
+  width: 20px !important;
+  margin-right: 8px !important;
+}
+
+.Toastify__progress-bar {
+  height: 2px !important;
+}
+
+.card {
+  transition: all 0.2s ease-in-out;
+}
+
+.card:not(.disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+.card.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Add these styles to your existing App.css */
+.Toastify__toast {
+  min-height: auto !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.Toastify__toast-container {
+  width: auto !important;
+  min-width: 300px !important;
+  max-width: 400px !important;
+}
+
+.Toastify__toast-body {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.Toastify__toast h6 {
+  margin: 0 0 0.25rem 0 !important;
+  font-size: 0.9rem !important;
+}
+
+.Toastify__toast div {
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+}
+
+.Toastify__close-button {
+  opacity: 0.5 !important;
+  padding: 4px !important;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1 !important;
+}
+
+.Toastify__toast-icon {
+  width: 20px !important;
+  margin-right: 8px !important;
+} 

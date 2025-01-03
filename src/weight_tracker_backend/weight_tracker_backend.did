@@ -1,3 +1,81 @@
+type WeightKey = record {
+    item_id: text;
+    created_at: nat64;
+};
+
+type Weight = record {
+    owner: principal;
+    item_id: text;
+    weight: float64;
+    created_at: nat64;
+    updated_at: nat64;
+    deleted_at: opt nat64;
+};
+
+type CreateWeightRequest = record {
+    owner_override: opt principal;
+    batch_id: text;
+    item_id: text;
+    weight: float64;
+};
+
+type Batch = record {
+    id: text;
+    name: text;
+    owner: principal;
+    description: opt text;
+    created_at: nat64;
+    updated_at: nat64;
+    deleted_at: opt nat64;
+};
+
+type BatchStats = record {
+    count: nat64;
+    min_weight: float64;
+    max_weight: float64;
+    average_weight: float64;
+};
+
+type BatchWithStats = record {
+    batch: Batch;
+    stats: BatchStats;
+};
+
+type CreateBatchRequest = record {
+    name: text;
+    description: opt text;
+};
+
+type UpdateBatchRequest = record {
+    name: text;
+    description: opt text;
+};
+
+type ShareableBatch = record {
+    id: text;
+    name: text;
+};
+
+type RemoveSharingRequest = record {
+    collaborator: principal;
+};
+
 service : {
-    "greet": (text) -> (text) query;
-}
+    "create_weight": (CreateWeightRequest) -> (text);
+    "get_all_weights": (opt text, bool) -> (vec Weight) query;
+    "update_weight": (item_id: text, created_at: nat64, weight: float64) -> (text);
+    "delete_weight": (item_id: text, created_at: nat64) -> (text);
+    "whoami": () -> (principal) query;
+    "share_with_user": (principal, text) -> (text);
+    "remove_sharing": (RemoveSharingRequest) -> (text);
+    "get_collaborators": () -> (vec principal) query;
+    "create_batch": (CreateBatchRequest) -> (variant { Ok: text; Err: text });
+    "update_batch": (text, UpdateBatchRequest) -> (variant { Ok; Err: text });
+    "get_batches": (include_deleted: bool) -> (vec BatchWithStats) query;
+    "get_batch": (text) -> (variant { Ok: BatchWithStats; Err: text }) query;
+    "get_batch_owner": (text) -> (variant { Ok: principal; Err: text }) query;
+    "delete_batch": (text) -> (variant { Ok; Err: text });
+    "get_owned_batches": () -> (vec BatchWithStats) query;
+    "get_shareable_batches": () -> (vec ShareableBatch) query;
+};
+

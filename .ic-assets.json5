@@ -1,0 +1,55 @@
+[
+  {
+    "disable_security_policy_warning": true,
+    "policies": [
+      {
+        "match": "**/*",
+        "headers": {
+          "X-Frame-Options": "DENY",
+          "X-Content-Type-Options": "nosniff",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "Referrer-Policy": "same-origin",
+          "Content-Security-Policy": "default-src 'self' 'unsafe-eval' 'unsafe-inline' data: https://*.ic0.app https://*.icp0.io https://*.internetcomputer.org; connect-src 'self' https://*.ic0.app https://*.icp0.io https://*.internetcomputer.org"
+        },
+        "allow_raw_access": false,
+        "security_policy": "standard"
+      },
+      {
+        "match": "**/*.js",
+        "headers": {
+          "Content-Type": "text/javascript"
+        }
+      },
+      {
+        "match": "**/*.css",
+        "headers": {
+          "Content-Type": "text/css"
+        }
+      },
+      {
+        "match": "**/*.html",
+        "headers": {
+          "Content-Type": "text/html; charset=utf-8"
+        }
+      },
+      {
+        "match": "**/*.json",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      {
+        "match": "**/*.ico",
+        "headers": {
+          "Content-Type": "image/x-icon"
+        }
+      },
+      {
+        "match": "**/*.svg",
+        "headers": {
+          "Content-Type": "image/svg+xml"
+        }
+      }
+    ]
+  }
+] 

@@ -1,0 +1,3 @@
+Update this to do crud for weights the weight should capture a animal id, weight as double in kg with 2 decimal and a created and updated time stamp. also soft delete with delete time stamp. Then add get all with a flag for deleted 
+
+Now update the Frontend to use the backend code and crud weight transactions and list the ones already done 
