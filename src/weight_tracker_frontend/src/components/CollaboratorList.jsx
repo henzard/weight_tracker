@@ -29,7 +29,7 @@ const CollaboratorList = ({
       defaultExpanded={false}
     >
       <div className="card-body">
-        <form onSubmit={onShare} className="mb-4">
+        <form onSubmit={onShare} className="mb-4" data-testid="share-form">
           <div className="row g-3">
             <div className="col-md-4">
               <label htmlFor="collaboratorId" className="form-label">
@@ -98,7 +98,11 @@ const CollaboratorList = ({
                                 !b.batch.deleted_at &&
                                 hasAccess(c, b.batch.id))
                       .map(b => (
-                        <span key={b.batch.id} className="badge bg-info me-1">
+                        <span
+                          key={b.batch.id}
+                          className="badge bg-info me-1"
+                          data-testid="batch-badge"
+                        >
                           {b.batch.name}
                         </span>
                       ))}
