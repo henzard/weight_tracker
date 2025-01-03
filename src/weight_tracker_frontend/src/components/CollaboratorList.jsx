@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import CollapsibleCard from './common/CollapsibleCard';
 
@@ -7,6 +7,7 @@ const CollaboratorList = ({
   shareableBatches,
   collaboratorId,
   sharingBatchId,
+  isSharing = false,
   onCollaboratorIdChange,
   onSharingBatchIdChange,
   onShare,
@@ -21,6 +22,11 @@ const CollaboratorList = ({
     sharingBatchId
   });
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const filteredCollaborators = collaborators.filter(c => 
+    c.toText().toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <CollapsibleCard 
       title="Manage Data Sharing"
@@ -34,6 +40,11 @@ const CollaboratorList = ({
             <div className="col-md-4">
               <label htmlFor="collaboratorId" className="form-label">
                 Share with (Principal ID)
+                <i 
+                  className="fas fa-info-circle ms-1" 
+                  data-bs-toggle="tooltip" 
+                  title="Enter the Principal ID of the user you want to share with"
+                ></i>
               </label>
               <input
                 id="collaboratorId"
@@ -41,8 +52,12 @@ const CollaboratorList = ({
                 value={collaboratorId}
                 onChange={(e) => onCollaboratorIdChange(e.target.value)}
                 placeholder="Enter collaborator's Principal ID"
+                aria-describedby="collaboratorHelp"
                 required
               />
+              <div id="collaboratorHelp" className="form-text">
+                The Principal ID can be found in the user's profile
+              </div>
             </div>
             <div className="col-md-4">
               <label htmlFor="sharingBatchId" className="form-label">
@@ -51,26 +66,30 @@ const CollaboratorList = ({
               <select
                 className="form-select"
                 value={sharingBatchId}
-                onChange={(e) => {
-                  console.log('Batch selected:', e.target.value);
-                  onSharingBatchIdChange(e.target.value);
-                }}
+                id="sharingBatchId"
+                onChange={(e) => onSharingBatchIdChange(e.target.value)}
+                disabled={!collaboratorId}
               >
-                <option value="">Select a batch to share</option>
-                {shareableBatches.map((batch) => {
-                  console.log('Rendering batch option:', batch);
-                  return (
-                    <option key={batch.id} value={batch.id}>
-                      {batch.name}
-                    </option>
-                  );
-                })}
+                <option value="">
+                  {!collaboratorId 
+                    ? "Enter collaborator ID first" 
+                    : "Select a batch to share"}
+                </option>
+                {shareableBatches.map((batch) => (
+                  <option key={batch.id} value={batch.id}>
+                    {batch.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="col-md-4 d-flex align-items-end">
-              <button type="submit" className="btn btn-primary">
-                <i className="fas fa-share me-2"></i>
-                Share Batch
+              <button 
+                type="submit" 
+                className="btn btn-primary"
+                disabled={isSharing || !collaboratorId || !sharingBatchId}
+              >
+                <i className={`fas ${isSharing ? 'fa-spinner fa-spin' : 'fa-share'} me-2`}></i>
+                {isSharing ? 'Sharing...' : 'Share Batch'}
               </button>
             </div>
           </div>
@@ -78,15 +97,30 @@ const CollaboratorList = ({
 
         {collaborators.length > 0 && (
           <div>
-            <h6>Current Collaborators:</h6>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h6>Current Collaborators:</h6>
+              <input
+                type="search"
+                className="form-control w-auto"
+                placeholder="Search collaborators..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+              />
+            </div>
             <ul className="list-group">
-              {collaborators.map((c) => (
+              {filteredCollaborators.map((c) => (
                 <li key={c.toText()} className="list-group-item">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <span className="principal-text">{c.toText()}</span>
                     <button
                       className="btn btn-danger btn-sm"
-                      onClick={() => onRemoveCollaborator(c.toText())}
+                      onClick={() => {
+                        if (window.confirm(`Remove collaborator ${c.toText()}?`)) {
+                          onRemoveCollaborator(c.toText())
+                        }
+                      }}
+                      data-bs-toggle="tooltip"
+                      title="Remove collaborator access"
                     >
                       <i className="fas fa-user-minus"></i>
                     </button>

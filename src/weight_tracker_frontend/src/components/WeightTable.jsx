@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Suspense } from 'react';
 import DataTable from 'react-data-table-component';
+import LoadingSpinner from './LoadingSpinner';
 
 const WeightTable = ({
   weights,
@@ -13,7 +14,8 @@ const WeightTable = ({
   onFilterTextChange,
   principal,
   selectedBatch,
-  onClearBatchSelection
+  onClearBatchSelection,
+  loading = false,
 }) => {
   const columns = [
     {
@@ -91,7 +93,7 @@ const WeightTable = ({
   ];
 
   return (
-    <div className="card shadow-sm">
+    <div className="card shadow-sm" data-tour="weight-table">
       <div className="card-header bg-light">
         <div className="row align-items-center">
           <div className="col">
@@ -128,7 +130,31 @@ const WeightTable = ({
         </div>
       </div>
       <div className="card-body">
-        <Suspense fallback={<div>Loading table...</div>}>
+        {weights.length === 0 ? (
+          <div className="text-center py-5">
+            <img 
+              src="/empty-state.svg" 
+              alt="No weights" 
+              className="mb-4" 
+              style={{ maxWidth: '200px' }}
+            />
+            <h4 className="text-muted">No Weights Recorded</h4>
+            <p className="text-muted mb-4">
+              {selectedBatch 
+                ? "This batch doesn't have any weights yet. Add your first weight measurement above!"
+                : "Select a batch to view and manage weights"}
+            </p>
+            {selectedBatch && (
+              <button 
+                className="btn btn-primary"
+                onClick={() => document.querySelector('#weight-form').scrollIntoView({ behavior: 'smooth' })}
+              >
+                <i className="fas fa-plus me-2"></i>
+                Add Your First Weight
+              </button>
+            )}
+          </div>
+        ) : (
           <DataTable
             columns={columns}
             data={weights}
@@ -174,8 +200,14 @@ const WeightTable = ({
             striped
             highlightOnHover
             responsive
+            progressPending={loading}
+            progressComponent={
+              <div className="py-5">
+                <LoadingSpinner message="Loading weights..." />
+              </div>
+            }
           />
-        </Suspense>
+        )}
       </div>
     </div>
   );
@@ -195,6 +227,7 @@ WeightTable.propTypes = {
     name: PropTypes.string.isRequired,
   }),
   onClearBatchSelection: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default WeightTable; 

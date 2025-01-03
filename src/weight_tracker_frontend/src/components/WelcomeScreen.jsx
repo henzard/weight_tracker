@@ -14,6 +14,44 @@ const WelcomeScreen = ({ onLogin }) => {
           </p>
         </div>
 
+        <div className="steps-section mb-5">
+          <div className="steps">
+            <div className="step">
+              <div className="step-number">1</div>
+              <div className="step-content">
+                <h4>Login</h4>
+                <p>Securely sign in with Internet Identity</p>
+              </div>
+            </div>
+            <div className="step">
+              <div className="step-number">2</div>
+              <div className="step-content">
+                <h4>Create Batch</h4>
+                <p>Organize your weights into batches</p>
+              </div>
+            </div>
+            <div className="step">
+              <div className="step-number">3</div>
+              <div className="step-content">
+                <h4>Add Weights</h4>
+                <p>Start tracking your measurements</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="demo-section mb-5">
+          <div className="demo-video">
+            <div className="ratio ratio-16x9">
+              <div className="demo-placeholder">
+                <i className="fas fa-play-circle fa-3x mb-3"></i>
+                <h4>See how it works</h4>
+                <p className="text-muted">Quick 2-minute demo</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="features-grid mb-5">
           <div className="feature-card" data-testid="feature-card">
             <i className="fas fa-box feature-icon"></i>
