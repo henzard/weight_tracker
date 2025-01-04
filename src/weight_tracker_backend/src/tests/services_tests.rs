@@ -88,7 +88,7 @@ impl MockWeightRepo {
 }
 
 impl WeightRepository for MockWeightRepo {
-    fn create(&mut self, key: WeightKey, weight: Weight) -> Result<(), String> {
+    fn create(&self, key: WeightKey, weight: Weight) -> Result<(), String> {
         self.weights.borrow_mut().insert(key, weight);
         Ok(())
     }
@@ -106,7 +106,7 @@ impl WeightRepository for MockWeightRepo {
             .collect()
     }
 
-    fn update(&mut self, key: WeightKey, weight: f64) -> Result<(), String> {
+    fn update(&self, key: WeightKey, weight: f64) -> Result<(), String> {
         if let Some(entry) = self.weights.borrow_mut().get_mut(&key) {
             entry.weight = weight;
             entry.updated_at = 1000;
@@ -116,7 +116,7 @@ impl WeightRepository for MockWeightRepo {
         }
     }
 
-    fn delete(&mut self, key: WeightKey) -> Result<(), String> {
+    fn delete(&self, key: WeightKey) -> Result<(), String> {
         if let Some(entry) = self.weights.borrow_mut().get_mut(&key) {
             entry.deleted_at = Some(1000);
             Ok(())
@@ -248,7 +248,7 @@ fn test_weight_service_create() {
     let request = CreateWeightRequest {
         owner_override: None,
         batch_id: "test_batch".to_string(),
-        animal_id: "test_animal".to_string(),
+        item_id: "test_animal".to_string(),
         weight: 100.0,
     };
 
@@ -289,7 +289,7 @@ fn test_weight_service_unauthorized() {
     let request = CreateWeightRequest {
         owner_override: None,
         batch_id: "test_batch".to_string(),
-        animal_id: "test_animal".to_string(),
+        item_id: "test_animal".to_string(),
         weight: 100.0,
     };
 
@@ -332,7 +332,7 @@ fn test_weight_service_crud_operations() {
     let create_request = CreateWeightRequest {
         owner_override: None,
         batch_id: "test_batch".to_string(),
-        animal_id: "test_animal".to_string(),
+        item_id: "test_animal".to_string(),
         weight: 100.0,
     };
     let result = service.create_weight(create_request, owner);
@@ -483,13 +483,13 @@ fn test_batch_stats_calculation() {
     for (i, &weight) in weights.iter().enumerate() {
         let key = WeightKey {
             owner,
-            animal_id: format!("animal_{}", i),
+            item_id: format!("animal_{}", i),
             created_at: now + i as u64,
         };
         let weight_entry = Weight {
             owner,
             batch_id: "test_batch".to_string(),
-            animal_id: format!("animal_{}", i),
+            item_id: format!("animal_{}", i),
             weight,
             created_at: now + i as u64,
             updated_at: now + i as u64,
@@ -559,7 +559,7 @@ fn test_invalid_batch_id() {
     let request = CreateWeightRequest {
         owner_override: None,
         batch_id: "nonexistent_batch".to_string(),
-        animal_id: "test_animal".to_string(),
+        item_id: "test_animal".to_string(),
         weight: 100.0,
     };
 
@@ -745,7 +745,7 @@ fn test_negative_weight_value() {
     let request = CreateWeightRequest {
         owner_override: None,
         batch_id: "test_batch".to_string(),
-        animal_id: "test_animal".to_string(),
+        item_id: "test_animal".to_string(),
         weight: -100.0,  // Negative weight
     };
 
@@ -778,14 +778,14 @@ fn test_update_deleted_weight() {
 
     let key = WeightKey {
         owner,
-        animal_id: "test_animal".to_string(),
+        item_id: "test_animal".to_string(),
         created_at: now,
     };
 
     let weight = Weight {
         owner,
         batch_id: "test_batch".to_string(),
-        animal_id: "test_animal".to_string(),
+        item_id: "test_animal".to_string(),
         weight: 100.0,
         created_at: now,
         updated_at: now,
@@ -889,7 +889,7 @@ fn test_extremely_large_weight() {
     let request = CreateWeightRequest {
         owner_override: None,
         batch_id: "test_batch".to_string(),
-        animal_id: "test_animal".to_string(),
+        item_id: "test_animal".to_string(),
         weight: f64::MAX,  // Extremely large weight
     };
 
@@ -930,13 +930,13 @@ fn test_empty_animal_id() {
     let request = CreateWeightRequest {
         owner_override: None,
         batch_id: "test_batch".to_string(),
-        animal_id: "".to_string(),  // Empty animal ID
+        item_id: "".to_string(),  // Empty animal ID
         weight: 100.0,
     };
 
     let result = service.create_weight(request, owner);
     assert!(result.is_err());
-    assert!(result.unwrap_err().contains("Animal ID cannot be empty"));
+    assert!(result.unwrap_err().contains("Item ID cannot be empty"));
 }
 
 #[test]

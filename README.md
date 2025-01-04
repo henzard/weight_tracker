@@ -104,6 +104,61 @@ npm test
 npm run build
 ```
 
+## Testing
+
+### Frontend Testing
+- **Vitest**: Main testing framework for JavaScript/TypeScript
+  - Component testing with React Testing Library
+  - DOM testing with jest-dom
+  - User event simulation
+  - Code coverage reporting
+
+```bash
+# Run frontend tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+### Backend Testing
+- **Rust's Built-in Testing Framework**
+  - Unit tests
+  - Integration tests
+  - Service-level tests
+  - Repository tests
+  - Model tests
+
+```bash
+# Run backend tests
+cd src/weight_tracker_backend
+cargo test
+
+# Run tests with coverage (using tarpaulin)
+cargo tarpaulin
+```
+
+### Test Organization
+```
+weight_tracker/
+├── src/
+│   ├── weight_tracker_backend/
+│   │   └── tests/
+│   │       ├── mod.rs
+│   │       ├── integration_tests.rs
+│   │       ├── services_tests.rs
+│   │       ├── models_tests.rs
+│   │       └── repositories_tests.rs
+│   └── weight_tracker_frontend/
+│       └── src/
+│           └── components/
+│               └── __tests__/
+│                   └── App.test.jsx
+```
+
 ## Contributing
 
 1. Fork the repository

@@ -65,13 +65,13 @@ fn test_weight_storage() {
     // Test Create
     let key = WeightKey {
         owner,
-        animal_id: "test_animal".to_string(),
+        item_id: "test_animal".to_string(),
         created_at: 1000,
     };
     let weight = Weight {
         owner,
         batch_id: "test_batch".to_string(),
-        animal_id: "test_animal".to_string(),
+        item_id: "test_animal".to_string(),
         weight: 100.0,
         created_at: 1000,
         updated_at: 1000,
