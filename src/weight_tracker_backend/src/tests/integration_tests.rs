@@ -1,49 +1,163 @@
 #[cfg(test)]
 mod integration_tests {
-    use crate::models::{CreateBatchRequest, CreateWeightRequest};
+    use crate::models::{
+        CreateBatchRequest,
+        CreateWeightRequest,
+        UpdateBatchRequest
+    };
     use crate::{
         create_batch,
         create_weight,
         share_with_user,
-        get_batches
+        get_batches,
+        get_batch,
+        update_batch,
+        delete_batch
     };
     use candid::Principal;
-    use std::cell::RefCell;
+    use light_ic::{LightIC, Replica};
 
-    thread_local! {
-        static MOCK_CALLER: RefCell<Principal> = RefCell::new(
-            Principal::from_text("2vxsx-fae").unwrap()
-        );
+    fn setup_test_env() -> LightIC {
+        LightIC::new()
     }
 
-    // Mock the IC environment
-    #[cfg(test)]
-    mod ic_mock {
-        use super::*;
+    #[test]
+    fn test_batch_creation_and_retrieval() {
+        let mut light_ic = setup_test_env();
+        let test_principal = Principal::from_text("2vxsx-fae").unwrap();
+        
+        light_ic.set_caller(test_principal);
 
-        pub fn mock_caller() -> Principal {
-            MOCK_CALLER.with(|caller| *caller.borrow())
-        }
+        light_ic.execute_ingress(|_| {
+            // Create batch
+            let batch_request = CreateBatchRequest {
+                name: "Test Batch".to_string(),
+                description: Some("Test Description".to_string()),
+            };
+            let batch_id = create_batch(batch_request).unwrap();
 
-        pub fn set_caller(principal: Principal) {
-            MOCK_CALLER.with(|caller| {
-                *caller.borrow_mut() = principal;
-            });
-        }
+            // Retrieve batch
+            let batch = get_batch(batch_id.clone()).unwrap();
+            assert_eq!(batch.batch.name, "Test Batch");
+            assert_eq!(batch.batch.description, Some("Test Description".to_string()));
+        });
     }
 
-    // Mock the ic_cdk::caller() function
-    #[no_mangle]
-    extern "C" fn ic0_msg_caller_size() -> i32 {
-        29 // Size of Principal
+    #[test]
+    fn test_batch_update() {
+        let mut light_ic = setup_test_env();
+        let test_principal = Principal::from_text("2vxsx-fae").unwrap();
+        
+        light_ic.set_caller(test_principal);
+
+        light_ic.execute_ingress(|_| {
+            // Create batch
+            let batch_request = CreateBatchRequest {
+                name: "Original Name".to_string(),
+                description: None,
+            };
+            let batch_id = create_batch(batch_request).unwrap();
+
+            // Update batch
+            let update_request = UpdateBatchRequest {
+                name: "Updated Name".to_string(),
+                description: Some("New Description".to_string()),
+            };
+            let result = update_batch(batch_id.clone(), update_request);
+            assert!(result.is_ok());
+
+            // Verify update
+            let updated_batch = get_batch(batch_id).unwrap();
+            assert_eq!(updated_batch.batch.name, "Updated Name");
+            assert_eq!(updated_batch.batch.description, Some("New Description".to_string()));
+        });
     }
 
-    #[no_mangle]
-    extern "C" fn ic0_msg_caller_copy(dst: u32, _offset: u32, _size: u32) {
-        unsafe {
-            let caller = ic_mock::mock_caller();
-            let bytes = caller.as_slice();
-            std::ptr::copy(bytes.as_ptr(), dst as *mut u8, bytes.len());
-        }
+    #[test]
+    fn test_batch_deletion() {
+        let mut light_ic = setup_test_env();
+        let test_principal = Principal::from_text("2vxsx-fae").unwrap();
+        
+        light_ic.set_caller(test_principal);
+
+        light_ic.execute_ingress(|_| {
+            // Create batch
+            let batch_request = CreateBatchRequest {
+                name: "To Delete".to_string(),
+                description: None,
+            };
+            let batch_id = create_batch(batch_request).unwrap();
+
+            // Delete batch
+            let result = delete_batch(batch_id.clone());
+            assert!(result.is_ok());
+
+            // Verify deletion
+            let batches = get_batches(false);
+            assert!(!batches.iter().any(|b| b.batch.id == batch_id));
+        });
+    }
+
+    #[test]
+    fn test_weight_management() {
+        let mut light_ic = setup_test_env();
+        let test_principal = Principal::from_text("2vxsx-fae").unwrap();
+        
+        light_ic.set_caller(test_principal);
+
+        light_ic.execute_ingress(|_| {
+            // Create batch
+            let batch_request = CreateBatchRequest {
+                name: "Weight Test".to_string(),
+                description: None,
+            };
+            let batch_id = create_batch(batch_request).unwrap();
+
+            // Add weight
+            let weight_request = CreateWeightRequest {
+                batch_id: batch_id.clone(),
+                item_id: "test_item".to_string(),
+                weight: 100.0,
+                owner_override: None,
+            };
+            let result = create_weight(weight_request);
+            assert!(result.contains("successfully"));
+
+            // Verify weight in batch
+            let batch = get_batch(batch_id).unwrap();
+            assert_eq!(batch.stats.count, 1);
+            assert_eq!(batch.stats.average_weight, 100.0);
+        });
+    }
+
+    #[test]
+    fn test_batch_sharing() {
+        let mut light_ic = setup_test_env();
+        let owner = Principal::from_text("2vxsx-fae").unwrap();
+        let collaborator = Principal::from_text("rrkah-fqaaa-aaaaa-aaaaq-cai").unwrap();
+        
+        light_ic.set_caller(owner);
+
+        light_ic.execute_ingress(|_| {
+            // Create batch
+            let batch_request = CreateBatchRequest {
+                name: "Shared Batch".to_string(),
+                description: None,
+            };
+            let batch_id = create_batch(batch_request).unwrap();
+
+            // Share batch
+            let share_result = share_with_user(collaborator, batch_id.clone());
+            assert!(share_result.contains("successfully"));
+        });
+
+        // Switch to collaborator
+        light_ic.set_caller(collaborator);
+
+        light_ic.execute_ingress(|_| {
+            // Verify collaborator can access batch
+            let batch = get_batch(batch_id);
+            assert!(batch.is_ok());
+        });
     }
 } 

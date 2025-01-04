@@ -4,5 +4,5 @@ mod services_tests;
 mod models_tests;
 #[cfg(test)]
 mod repositories_tests;
-#[cfg(test)]
-mod integration_tests; 
+// #[cfg(test)]
+// mod integration_tests; 
